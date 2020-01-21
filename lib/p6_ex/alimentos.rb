@@ -226,7 +226,9 @@ end
 
 
 class Ambiental < Plato
-
+	
+	include Comparable
+	
 	def get_co2
                 it1 = 0
                 it2 = 0
@@ -262,6 +264,29 @@ class Ambiental < Plato
                 end
                 return terr
         end
+	
+	def imp_energia
+		if( get_co2 < 670)
+			return 1
+		elsif(get_co2 < 830)
+			return 2
+		end
+		return 3
+	end
+
+	def imp_carbono
+		if( vct < 800)
+			return 1
+		elsif ( vct < 1200)
+			return 2
+		end
+		return 3
+	end
+
+	def huella_nutricional
+		return (imp_energia + imp_carbono)/2
+	end
+
 
 	def to_s
 		salida = "Cantidad de CO2: "
@@ -270,4 +295,14 @@ class Ambiental < Plato
 		salida = salida + get_terreno.to_s
 		return salida
 	end
+	
+	def incremento(p)
+		p.collect{ |x| x * huella_nutricional}
+	end
+
+	def <=>(sida)
+		huella_nutricional <=> sida.huella_nutricional
+	end
 end
+
+

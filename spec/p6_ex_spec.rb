@@ -36,6 +36,18 @@ RSpec.describe P6Ex do
 		@Ambiente.push_gr(100)
 		@Ambiente.push_ali(@cerdo)
 		@Ambiente.push_gr(500)
+		@Amb = Ambiental.new("Segundo")
+		@Amb.push_ali(@queso)
+		@Amb.push_gr(20)
+		@Amb.push_ali(@pollo)
+		@Amb.push_gr(190)
+		#Creando los menus
+		@v = Array.new
+		@p = Array.new
+		@v.push(@Ambiente)
+		@v.push(@Amb)
+		@p.push(10)
+		@p.push(5)
 		#Dieta Española
 		@Locos_carne = Lista.new
 		@Locos_carne.push(@Plato)
@@ -113,6 +125,9 @@ RSpec.describe P6Ex do
 		it "Funciona el collect" do 
 			expect(@List.collect{|x| x.nom + "X"}).to eq([@cerdo.nom,@cerveza.nom,@carne.nom])
 		end
+		it "Funiona select" do 
+			expect(@List.select{ |x| x.nom.eql?("caña")}).to eq([@cerveza])
+		end
 	end	
 	context "Probando la clase plato" do
 		it "Existe un nombre para el plato"do 
@@ -153,6 +168,9 @@ RSpec.describe P6Ex do
 		it "Nombre de la clase"do 
 			expect(@Ambiente.class).to eq(Ambiental)
 		end
+		it "Funciona el calculo de la huella nutricional" do 
+			expect(@Ambiente.huella_nutricional).to eq(1)
+		end
 	end
 	context "Comprobamos las dietas y su funcionamiento" do 
 		it "Funciona el comparable " do 
@@ -165,4 +183,12 @@ RSpec.describe P6Ex do
 			expect(@Locos_carne.max).to eq(@Plato1)
 		end
 	end
+	context "Comprobamos el funcionamiento de los menus" do 
+		it "Funciona el max" do 
+			expect(@v.max).to eq(@Amb)
+		end
+		it "Incrementar el precio del vector " do 
+			expect(@v.max.incremento(@p)).to eq([10,5])
+		end
+	end	
 end
