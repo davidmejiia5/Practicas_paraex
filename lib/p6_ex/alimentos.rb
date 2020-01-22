@@ -305,4 +305,151 @@ class Ambiental < Plato
 	end
 end
 
+class PlatoDSL
+	
+	attr_accessor :n_plato, :List_ali, :List_gr
+
+	def initialize(name,&block)
+		@n_plato = name
+		@List_ali = Array.new
+		@List_gr = Array.new
+
+		if block_given? 
+			if block.arity == 1
+				yield self
+			else
+				instance_eval(&block)
+			end
+		end
+	end
+
+	def alimento(ali)
+		@List_ali.push(ali)
+	end
+	
+	def gramos(gr)
+		@List_gr.push(gr)
+	end
+	
+	def get_proteinas
+		it1 = 0
+		it2 = 0
+		p = 0
+		@List_gr.each do |x|
+			gr = x
+			it1 += 1
+			@List_ali.each do |y|
+				it2 += 1
+				if(it1 == it2)
+					p += gr*y.pro/100
+				end
+			end
+			it2 = 0
+		end
+		total = 0
+		@List_gr.each do |x|
+		       total += x
+		end
+ 		p = (p*100)/total
+		return p
+	end
+
+	def get_lipidos
+                it1 = 0
+                it2 = 0
+                l = 0
+                @List_gr.each do |x|
+                        gr = x
+                        it1 += 1
+                        @List_ali.each do |y|
+                                it2 += 1
+                                if(it1 == it2)
+                                        l += gr*y.lip/100
+                                end
+                        end
+                        it2 = 0
+                end
+                total = 0
+                @List_gr.each do |x|
+                       total += x
+                end
+                l = (l*100)/total
+                return l
+        end
+
+	def get_hidratos
+                it1 = 0
+                it2 = 0
+                h = 0
+                @List_gr.each do |x|
+                        gr = x
+                        it1 += 1
+                        @List_ali.each do |y|
+                                it2 += 1
+                                if(it1 == it2)
+                                        h += gr*y.car/100
+                                end
+                        end
+                        it2 = 0
+                end
+                total = 0
+                @List_gr.each do |x|
+                       total += x
+                end
+                h = (h*100)/total
+                return h
+        end
+
+	def vct
+		total = 0
+		@List_gr.each do |x|
+			total += x
+		end
+		pro = (get_proteinas*total)/100
+		lip = (get_lipidos*total)/100
+		h = (get_hidratos*total)/100
+		return ((pro*4)+(lip*9)+(h*4))
+	end
+
+end
+
+
+class Menu
+	attr_accessor :nombre, :List_plato, :List_precio
+	def initialize(nom,&block)
+		
+		@nombre = nom
+		@List_plato = Array.new
+		@List_precio = Array.new
+
+		if block_given?
+			if block.arity == 1
+				yield self
+			else 
+				instance_eval(&block)
+			end
+		end
+	end
+
+	def plato(p)
+		@List_plato.push(p)
+	end
+
+	def precio(p)
+		@List_precio.push(p)
+	end
+
+	def to_s 
+		precio = 0
+		@List_precio.collect { |x| precio += x}
+		output = "#{@nombre}"
+		output << " = #{precio}€ "
+		output << "Contiene: "
+		@List_plato.zip(@List_precio).each do |x,y|
+			output << "#{x.n_playto} = #{y} "
+		end
+		output
+	end
+
+end
 

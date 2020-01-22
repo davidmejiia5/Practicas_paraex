@@ -52,6 +52,36 @@ RSpec.describe P6Ex do
 		@Locos_carne = Lista.new
 		@Locos_carne.push(@Plato)
 		@Locos_carne.push(@Plato1)
+
+	#=================================================
+		@platodsl = PlatoDSL.new("Combinado de cerdo") do 
+			cerdo = Alimento.new("cerdo",21.5,0.0,6.3,7.6,11.0)
+			huevo = Alimento.new("huevo",13.0,1.1,11.0,4.2,5.7)
+			alimento cerdo
+			gramos 200
+			alimento huevo
+			gramos 50
+		end
+
+		@platodsl1 = PlatoDSL.new("Escaldon") do 
+			pollo = Alimento.new("pollo",20.6,0.0,5.6,5.7,7.1)
+                	queso = Alimento.new("queso",25.0,1.3,33.0,11.0,41.0)
+
+			alimento pollo
+			gramos 300
+			alimento queso
+			gramos 100
+		end
+
+	end
+
+	context "Comprobamos el plato DSL"do 
+		it "Exite un nombre"do 
+			expect(@platodsl.n_plato).to eq("Combinado de cerdo")
+		end
+		it "Existe un alimento"do 
+			expect(@platodsl.vct).to eq(363.09999999999997)
+		end
 	end
 
 	context "Debe existir"do 
